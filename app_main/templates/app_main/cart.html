@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block content %}
+    <main class="vh-100 bg-body-tertiary">
+        <div class="container m-auto mt-5 row gap-2 justify-content-center">
+            <h1 class="d-flex justify-content-center">Checkout</h1>
+            <section class="h-100 gradient-custom">
+                <div class="container py-2">
+                    <div class="row d-flex justify-content-center my-4">
+                        <div class="col-md-8">
+                            <div class="card mb-4">
+                                <div class="card-header py-3">
+                                    <h5 class="mb-0">Cart - {{ cart_items.count }} items</h5>
+                                </div>
+                                <div class="card-body">
+                                    {% for item in cart_items %}
+                                        <!-- Single item -->
+                                        <div class="row mb-4">
+                                            <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                                                <div class="bg-image hover-overlay hover-zoom ripple rounded"
+                                                     data-mdb-ripple-color="light">
+                                                    <img src="{{ item.product.image.url }}" class="w-100"
+                                                         alt="{{ item.product.name }}"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                                                <p><strong>{{ item.product.name }}</strong></p>
+                                                <p>Description: {{ item.product.description|truncatechars:40 }}</p>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                                                <div class="d-flex mb-4" style="max-width: 300px">
+                                                    <a href="{% url 'change_product_cart' item.product.id 'decrement' %}"
+                                                       class="btn btn-primary px-3 me-2">-</a>
+                                                    <input
+                                                            min="1"
+                                                            value="{{ item.quantity }}"
+                                                            type="number"
+                                                            class="form-control"/>
+                                                    <a href="{% url 'change_product_cart' item.product.id 'increment' %}"
+                                                       class="btn btn-primary px-3 ms-2">+</a>
+
+                                                </div>
+                                                <p class="text-start text-md-center">
+                                                    <strong>${{ item.product.new_price }}</strong></p>
+                                                <br>
+                                                <a href="{% url 'remove_from_cart' item.product.id %}" type="submit"
+                                                   class="btn btn-outline-primary btn-sm me-1 mb-2">
+                                                    <i class="bi bi-trash"></i> Remove
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <hr class="my-4"/>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <p><strong>Expected shipping delivery</strong></p>
+                                    <p class="mb-0">{{ today }} - {{ 10_day }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card mb-4">
+                                <div class="card-header py-3">
+                                    <h5 class="mb-0">Summary</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Products <span>${{ total_price }}</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Shipping <span>$10.00</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <strong>Total amount</strong>
+                                            <span><strong>${{ total_all }}</strong></span>
+                                        </li>
+                                    </ul>
+                                    <form method="POST" action="{% url 'checkout' %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary">GO TO CHECKOUT</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+{% endblock content %}

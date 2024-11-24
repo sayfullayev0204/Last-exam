@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <section class="vh-100 bg-light">
+        <div class="container py-5 h-100">
+            <div class="row d-flex align-items-center justify-content-center h-100">
+                <div class="col-md-8 col-lg-7 col-xl-6">
+                    <img
+                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+                            class="img-fluid"
+                            alt="Phone image"
+                    />
+                </div>
+                <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group mb-3">
+                                <label for="id_{{ field.name }}">{{ field.label }}</label>
+                                <input
+                                        type="{{ field.field.widget.input_type }}"
+                                        name="{{ field.name }}"
+                                        id="id_{{ field.name }}"
+                                        class="form-control"
+                                        placeholder=" your :{{field.name }}"
+                                        value="{{ field.value|default_if_none:'' }}"
+                                />
+                                {% if field.errors %}
+                                    <div class="text-danger mt-2">{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Sign up</button>
+                    </form>
+                    <div
+                            class="divider d-flex align-items-center my-4 d-flex justify-content-center"
+                    >
+                    </div>
+                    <p class="text-info text-center fw-bold mx-3 mb-0">OR</p>
+
+                    <!-- Google login button -->
+                    <a
+                            data-mdb-ripple-init
+                            class="btn btn-primary btn-lg btn-block"
+                            style="background-color: #4285F4"
+                            href="{% url 'social:begin' 'google-oauth2' %}"
+                            role="button"
+                    >
+                        <i class="fab fa-google me-2"></i>Continue with Google
+                    </a>
+                    </form>
+                    <div class="d-flex justify-content-center mt-3">
+                        <p class="m-0 text-info">
+                            Already have an account?
+                            <a href="{% url 'login' %}">Sign in</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}
